@@ -5,7 +5,7 @@ import settings
 from pprint import pprint
 import urllib.parse
 
-tc = TransmissionClient('yards01', 9091)
+tc = TransmissionClient('localhost', 9091)
 
 class TransmissionControl(object):
 
@@ -42,14 +42,5 @@ if __name__ == '__main__':
                             'tools.staticdir.root': settings.html_dir,
                             'tools.staticdir.on': True,
                             'tools.staticdir.dir': '',
-                            'tools.staticdir.index': 'templates/dashboard/index.html'
-                        },
-                        '/images': {
-                            'tools.staticdir.on': True,
-                            'tools.staticdir.dir': 'templates/dashboard/images'
-                        },
-                        '/styles.css': {
-                            'tools.staticfile.on': True,
-                            'tools.staticfile.filename': os.path.join(settings.html_dir,
-                                                                      'templates/dashboard/styles.css')
+                            'tools.staticdir.index': 'index.html'
                         }})
