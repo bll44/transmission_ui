@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="shortcut icon" href="images/favicon.png">
+ <title>TransmissionPy</title>
+ <!-- Latest compiled and minified CSS -->
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+ <!-- Optional theme -->
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+ <!-- jquery 3.1.1 -->
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+ crossorigin="anonymous"></script>
+
+ <!-- Latest compiled and minified JavaScript -->
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+ <nav class="navbar navbar-default">
+  <div class="container-fluid">
+   <!-- Brand and toggle get grouped for better mobile display -->
+   <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+     <span class="sr-only">Toggle navigation</span>
+     <span class="icon-bar"></span>
+     <span class="icon-bar"></span>
+     <span class="icon-bar"></span>
+   </button>
+   <a class="navbar-brand" href="#">TransmissionPy</a>
+ </div>
+
+ <!-- Collect the nav links, forms, and other content for toggling -->
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+   <ul class="nav navbar-nav">
+    <li><a href="#">Dashboard<span class="sr-only">(current)</span></a></li>
+    <li><a href="#">Torrents</a></li>
+    <li><a href="#">Errors</a></li>
+  </ul>
+  <!-- Quick Add Torrent Input -->
+  <form class="navbar-form navbar-left">
+    <div class="form-group">
+     <input type="text" class="form-control" placeholder="Torrent URL">
+   </div>
+   <button type="submit" class="btn btn-default">Add Torrent</button>
+ </form>
+ <!-- User dropdown menu -->
+ <ul class="nav navbar-nav navbar-right">
+  <li class="dropdown">
+   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">&lt;current_user&gt; <span class="caret"></span></a>
+   <ul class="dropdown-menu">
+    <li><a href="#">Preferences</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Log out</a></li>
+  </ul>
+</li>
+</ul>
+</div><!-- /.navbar-collapse -->
+</div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+  <div class="row">
+   <div class="col-sm-12">
+     <div class="panel panel-default hidden" id="torrent-panel">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Torrents</div>
+
+      <!-- Table -->
+      <table class="table table-striped">
+       <thead>
+        <tr>
+         <td><input type="checkbox" id="check-all-boxes"></td>
+         <td>Torrent Number</td>
+         <td>Name</td>
+         <td>Status</td>
+         <td>Percent Completed</td>
+         <td>Date Added</td>
+       </tr>
+     </thead>
+     <tbody id="torrent-list-tablebody">
+     </tbody>
+   </table>
+ </div>
+</div>
+</div>
+</div>
+</body>
+<script>
+
+/********* Global properties *********/
+var checked_row_color = 'warning' // color each row will turn when its checkbox is checked
+/*************************************/
+
+var loadTorrentPanel = function(callback) {
+  $('#torrent-panel').removeClass('hidden');
+  console.log(window.location.protocol);
+  console.log(window.location.host);
+  $.get({
+    url: window.location.protocol + '//' + window.location.host + '/get_torrents',
+    dataType: 'json',
+    success: function(torrents) {
+      for(t in torrents) {
+        torrent = torrents[t];
+        var checkbox_td = $('<td>', {'class': 'checkbox-td'});
+        var checkbox_input = $('<input>', {'type': 'checkbox', 'class': 'torrent-checkbox'});
+        checkbox_td.append(checkbox_input)
+
+        /***** Build the 'progress' table cell *****/
+        progress_percent_value = (torrent.percentDone * 100).toFixed(2);
+        progress_td = $('<td>', {'class': 'td-progress'});
+        progress_wrapper_div = $('<div>', {'class': 'progress'});
+        progressbar_div = $('<div>', {'class': 'progress-bar', 'role': 'progressbar', 'aria-valuenow': progress_percent_value,
+                                      'aria-valuemin': '0', 'aria-valuemax': '100', 'style': 'width: ' + progress_percent_value + '%;'});
+        progressbar_span = $('<span>', {'class': '', 'text': progress_percent_value + '%'});
+        // progress_td.append(progress_wrapper_div.append(progressbar_div.append(progressbar_span)));
+        // progress_td.append(progress_wrapper_div.append(progressbar_div)).append(progressbar_span);
+        progress_td.append(progressbar_span).append(progress_wrapper_div.append(progressbar_div));
+
+        /***** Build the 'status' table cell *****/
+        switch(torrent.status) {
+          case '0':
+            status_text = 'Paused';
+            break;
+          case '4':
+            status_text = 'Downloading';
+            break;
+          case '6':
+            status_text = 'Seeding';
+            break;
+          default:
+            status_text = 'unknown';
+        }
+        status_td = $('<td>', {'class': 'td-torrent-status', 'text': status_text});
+
+        /***** Create a list of table cells to be appended to the table row later *****/
+        var tds = [
+        $(checkbox_td),
+        $('<td>', {'text': (parseInt(t) + 1), 'class': 'td-torrent-num'}),
+        $('<td>', {'text': torrent.name, 'class': 'td-torrent-name'}),
+        $(status_td),
+        $(progress_td),
+        $('<td>', {
+          'class': 'td-torrent-dateAdded',
+          'text': function() {
+            var date = new Date(parseInt(torrent.addedDate) * 1000);
+            return date.getFullYear() + '/' + parseInt(date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
+          },
+        }),
+        ];
+        var tr = $('<tr>', {'data-torrent-id': torrent.id});
+        for(i in tds) {
+          tr.append(tds[i]);
+        }
+        $('#torrent-list-tablebody').append(tr);
+      }
+      callback()
+    }
+  });
+}
+
+var torrent_checkboxes;
+var loadCheckBoxes = function() {
+  var lastChecked = null;
+  torrent_checkboxes = $('.torrent-checkbox');
+  torrent_checkboxes.click(function(e) {
+    if( ! lastChecked) {
+      lastChecked = this;
+      return;
+    }
+
+    if(e.shiftKey) {
+      var start = torrent_checkboxes.index(this);
+      var end = torrent_checkboxes.index(lastChecked);
+
+      torrent_checkboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastChecked.checked);
+      toggleRowHighlight();
+    }
+
+    lastChecked = this;
+  });
+  $('.torrent-checkbox').on('change', function() {
+    toggleRowHighlight();
+  });
+}
+
+function uncheckAllRows() {
+  $('.torrent-checkbox').each(function() {
+    $(this).prop('checked', false);
+    $(this).parent().parent().removeClass(checked_row_color);
+  });
+}
+
+function checkAllRows() {
+  $('.torrent-checkbox').each(function() {
+    $(this).prop('checked', true);
+    $(this).parent().parent().addClass(checked_row_color);
+  })
+}
+
+function toggleRowHighlight() {
+  console.log('row highlight');
+  console.log('checkbox count: ' + $('.torrent-checkbox').length);
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+</script>
+</html>
+
+
+
+
+
+
+
+
