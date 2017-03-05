@@ -7,6 +7,7 @@ from pprint import pprint
 class TransmissionClient(object):
 
     _ROOT_DOWNLOAD_DIR = '/Users/bradylatsha/transmission_client/downloads'
+    _invalid_session_props = ['config_dir']
 
     def __init__(self, hostname, port=9091):
         """
@@ -77,7 +78,8 @@ class TransmissionClient(object):
         return session
 
     def set_session_properties(self, settings):
-        pprint(settings, indent=4)
-        settings.pop('config_dir', None)
-        self.client.set_session(**settings)
+        if settings is not None:
+            for p in self._invalid_session_props:
+                settings.pop(p, None)
+            self.client.set_session(**settings)
         self.session.update()

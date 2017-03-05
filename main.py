@@ -32,7 +32,6 @@ class TransmissionUI(object):
         tc.set_session_properties(data)
         return 'stats set successfully'
 
-
 if __name__ == '__main__':
     cherrypy.quickstart(TransmissionUI(), '/',
                         {'/': {
