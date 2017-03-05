@@ -151,6 +151,33 @@ body {
             <div role="tabpanel" class="tab-pane active" id="network_bandwidth">
               <form id="network_bandwidth_form" class="form-horizontal settings-form">
 
+                <h4>Network</h4>
+                <div class="form-group">
+                  <label for="peer_port" class="col-sm-7 control-label">Peer Port Number</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="peer_port" min="0" class="form-control" id="peer_port">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="peer_port_random_on_start" class="col-sm-7 control-label">Randomize Peer Port on Startup</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="peer_port_random_on_start" id="peer_port_random_on_start">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="port_forwarding_enabled" class="col-sm-7 control-label">Auto Map Port <small>(NAT Traversals use either NAT-PMP or UPnP)</small></label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="port_forwarding_enabled" id="port_forwarding_enabled">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <hr>
+
                 <!-- Bandwidth Limitation settings -->
                 <h4>Bandwidth Limitations</h4>
                 <div class="form-group">
@@ -296,21 +323,6 @@ body {
                 <hr>
 
                 <h4>Peering</h4>
-                <div class="form-group">
-                  <label for="peer_port" class="col-sm-7 control-label">Peer Port Number</label>
-                  <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <input type="number" name="peer_port" min="0" class="form-control" id="peer_port">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="peer_port_random_on_start" class="col-sm-7 control-label">Randomize Peer Port on Startup</label>
-                  <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="peer_port_random_on_start" id="peer_port_random_on_start">
-                      <option value="false">No</option>
-                      <option value="true">Yes</option>
-                    </select>
-                  </div>
-                </div>
                 <div class="form-group">
                   <label for="lpd_enabled" class="col-sm-7 control-label">Local Peer Discovery</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
