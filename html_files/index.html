@@ -711,6 +711,764 @@ $('#test-action-btn').click(function() {
   
 });
 
+
+
+
+/*******************testing************************/
+function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});function toggleRowHighlight() {
+  $('.torrent-checkbox').each(function() {
+    var parent_row = $(this).parent().parent();
+    if($(this).prop('checked')) {
+      parent_row.addClass(checked_row_color);
+    } else {
+      parent_row.removeClass(checked_row_color);
+    }
+  });
+}
+
+$('#check-all-boxes').click(function() {
+  if($(this).prop('checked')) {
+    checkAllRows();
+  } else {
+    uncheckAllRows();
+  }
+});
+
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
+
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  save_settings_btn = $('#save-settings-btn');
+  save_settings_btn.removeClass()
+                   .addClass('btn btn-primary')
+                   .html('Save changes')
+                   .attr('disabled', false);
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+/************ ENTRY POINT ***********/
+$(function() {
+ loadTorrentPanel(loadCheckBoxes);
+});
+$('#test-action-btn').click(function() {
+  
+});
+
 </script>
 </html>
 
