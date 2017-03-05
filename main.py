@@ -25,8 +25,11 @@ class TransmissionUI(object):
         return tc.get_session_stats()
 
     @cherrypy.expose
+    @cherrypy.tools.json_out()
+    @cherrypy.tools.json_in()
     def set_session_properties(self):
-        tc.set_session_properties()
+        data = cherrypy.request.json
+        tc.set_session_properties(data)
         return 'stats set successfully'
 
 

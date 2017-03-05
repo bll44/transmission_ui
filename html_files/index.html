@@ -96,6 +96,7 @@ body {
 </div><!-- /.container-fluid -->
 </nav>
 <div class="container-fluid">
+<button type="button" class="btn btn-danger" id="test-action-btn">Test action</button>
   <div class="row">
    <div class="col-sm-12">
    <div class="table-responsive">
@@ -273,6 +274,15 @@ body {
                 <!-- Queuing/Seeding/Peering settings -->
                 <h4>Queuing</h4>
                 <div class="form-group">
+                  <label for="start_added_torrents" class="col-sm-7 control-label">Start Added Torrents</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="start_added_torrents" id="start_added_torrents">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label for="download_queue_size" class="col-sm-7 control-label">Max Simultaneous Downloads</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
                     <input type="number" name="download_queue_size" min="0" class="form-control" id="download_queue_size">
@@ -374,7 +384,7 @@ body {
                   <label for="config_dir" class="col-sm-5 control-label">Configuration Directory</label>
                   <div class="col-sm-7 form-input">
                     <input type="text" name="config_dir" min="4" class="form-control" 
-                      id="config_dir" placeholder="/path/to/transmission/config/directory">
+                      id="config_dir" placeholder="/path/to/transmission/config/directory" disabled>
                   </div>
                 </div>
                 <div class="form-group">
@@ -431,7 +441,7 @@ body {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" id="save-settings-btn">Save changes</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -443,6 +453,7 @@ body {
 
 var checked_row_color = 'warning'; // color each row will turn when its checkbox is checked
 var async_url = window.location.protocol + '//' + window.location.host;
+var settings_exceptions = ['config_dir'];
 
 /*************************************/
 
@@ -554,6 +565,62 @@ var populateSettings = function(callback) {
   });
 }
 
+/***** Save client settings when 'Save Changes' button is clicked in the settingsModal *****/
+var saveSettings = function(callback) {
+  settings = {};
+  $('.settings-form input, .settings-form select').each(function() {
+
+    key = $(this).attr('id');
+    if($(this).prop('tagName').toLowerCase() == 'select') {
+
+      // if the element is a <select> tag
+      options = $(this).children();
+      if(settings_exceptions.indexOf(key) < 0) {
+        options.each(function() {
+          if($(this).prop('selected')) {
+            settings[key] = $(this).val();
+          }
+        });
+      }
+
+    } else if($(this).prop('tagName').toLowerCase() == 'input') {
+
+      // if the element is a <input> tag
+      if(settings_exceptions.indexOf(key) < 0) {
+        settings[key] = $(this).val();
+      }
+
+    }
+  });
+  var settings_json_string = JSON.stringify(settings);
+  $.ajax({
+    url: async_url + '/set_session_properties',
+    type: 'POST',
+    contentType: 'application/json',
+    data: settings_json_string,
+    success: function(data, status, xhr) {
+      save_btn = $('#save-settings-btn');
+      if(xhr.status == 200) {
+        save_btn.removeClass('btn-primary')
+                               .addClass('btn-success')
+                               .html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>&nbsp;&nbsp;Settings Saved Successfully!');
+        setTimeout(function() {
+          callback();
+        }, 900);
+      } else {
+        // add error alert to modal if the request fails...
+        var alert = $('<div>', {'class': 'alert alert-danger alert-dismissible', 'role': 'alert', 'id': 'settings-save-error-alert'});
+        var dismiss_btn = $('<button>', {'type': 'button', 'class': 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'});
+        var dismiss_btn_span = $('<span>', {'aria-hidden': 'true', 'html': '&times;'});
+        var alert_strong_text = $('<strong>', {'html': '<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;'});
+        var alert_description = 'There was an error when trying to save your settings, please check that your Transmission Client is running!';
+        $('#settingsModal .modal-body').append(alert.append(dismiss_btn.append(dismiss_btn_span)).append(alert_strong_text).append(alert_description));
+      }
+    }
+  });
+
+} // end saveSettings function
+
 var torrent_checkboxes;
 var loadCheckBoxes = function() {
   var lastChecked = null;
@@ -618,10 +685,27 @@ $('#client-settings-btn').click(function() {
   });
 })
 
+$('#save-settings-btn').click(function() {
+  saveSettings(function() {
+    $('#settingsModal').modal('hide');
+  });
+});
+
+/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+$('#settingsModal').on('hidden.bs.modal', function(e) {
+  $('#save-settings-btn').removeClass();
+  $('#save-settings-btn').addClass('btn btn-primary').html('Save changes');
+  if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
 /************ ENTRY POINT ***********/
 $(function() {
  loadTorrentPanel(loadCheckBoxes);
 });
+$('#test-action-btn').click(function() {
+  
+});
+
 </script>
 </html>
 

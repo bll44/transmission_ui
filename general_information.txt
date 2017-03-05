@@ -97,7 +97,7 @@ string                           | value type | description
 ~477	   "port_forwarding_enabled"        | boolean    | true means enabled
 ~478	   "queue_stalled_enabled"          | boolean    | whether or not to consider idle torrents as stalled
 ~479	   "queue_stalled_minutes"          | number     | torrents that are idle for N minuets aren't counted toward seed_queue_size or download_queue_size
-480	   "rename_partial_files"           | boolean    | true means append ".part" to incomplete files
+*480	   "rename_partial_files"           | boolean    | true means append ".part" to incomplete files
 481	   "rpc_version"                    | number     | the current RPC API version
 ~482	   "rpc_version_minimum"            | number     | the minimum RPC API version supported
 ~483	   "script_torrent_done_filename"   | string     | filename of the script to run
@@ -110,8 +110,8 @@ string                           | value type | description
 *490	   "speed_limit_down_enabled"       | boolean    | true means enabled
 *491	   "speed_limit_up"                 | number     | max global upload speed (KBps)
 *492	   "speed_limit_up_enabled"         | boolean    | true means enabled
-493	   "start_added_torrents"           | boolean    | true means added torrents will be started right away
-494	   "trash_original_torrent_files"   | boolean    | true means the .torrent file of added torrents will be deleted
+*493	   "start_added_torrents"           | boolean    | true means added torrents will be started right away
+*494	   "trash_original_torrent_files"   | boolean    | true means the .torrent file of added torrents will be deleted
 495	   "units"                          | object     | see below
 496	   "utp_enabled"                    | boolean    | true means allow utp
 497	   "version"                        | string     | long version string "$version ($revision)"

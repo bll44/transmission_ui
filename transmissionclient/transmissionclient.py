@@ -1,6 +1,7 @@
 import transmissionrpc
 import os
 import urllib.parse
+from pprint import pprint
 
 
 class TransmissionClient(object):
@@ -75,7 +76,8 @@ class TransmissionClient(object):
         session = self._build_object_dict(self.client.session_stats())
         return session
 
-    def set_session_properties(self, props=None):
-        if props is not None:
-            pass
+    def set_session_properties(self, settings):
+        pprint(settings, indent=4)
+        settings.pop('config_dir', None)
+        self.client.set_session(**settings)
         self.session.update()
