@@ -449,11 +449,24 @@ body {
 <script>
 
 /********* Global properties *********/
-
+var client_settings = {};
 var checked_row_color = 'warning'; // color each row will turn when its checkbox is checked
 var async_url = window.location.protocol + '//' + window.location.host;
-
 /*************************************/
+
+var load_config = function(callback=function(){}) {
+  $.get({
+    url: async_url + '/get_session_stats',
+    dataType: 'json',
+    success: function(data) {
+      for(i in data) {
+        client_settings[i] = data[i];
+      }
+      console.log(client_settings);
+      callback.call();
+    }
+  })
+}
 
 var loadTorrentPanel = function(callback) {
   $('#torrent-panel').removeClass('hidden');
@@ -527,7 +540,6 @@ var populateSettings = function(callback) {
     url: async_url + '/get_session_stats',
     dataType: 'json',
     success: function(settings) {
-
       // populate the input fields within the settings modal
       // by looping through the input ids, and setting the values accordingly.
       // this is possible because the input ids are the same as the keys in the settings json object
@@ -557,7 +569,6 @@ var populateSettings = function(callback) {
           })
         });
       }
-
       callback();
     }
   });
@@ -704,9 +715,15 @@ $('#settingsModal').on('hidden.bs.modal', function(e) {
 });
 
 /************ ENTRY POINT ***********/
+var init_app = function() {
+  load_config(function() {
+    loadTorrentPanel(loadCheckBoxes);
+  });
+}
+// start the application
 $(function() {
- loadTorrentPanel(loadCheckBoxes);
-});
+  init_app();
+})
 </script>
 </html>
 
