@@ -156,30 +156,30 @@ body {
                 <div class="form-group">
                   <label for="speed_limit_down" class="col-sm-7 control-label">Maximum Download Speed (KB/s)</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <input type="number" name="speed_limit_down" min="0" class="form-control" id="speed_limit_down" value="0">
+                    <input type="number" name="speed_limit_down" min="0" class="form-control" id="speed_limit_down">
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="speed_limit_down_enabled" class="col-sm-7 control-label">Maximum Download Speed Limit Enabled</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="speed_limit_down_enabled">
-                      <option value="no" selected>No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="speed_limit_down_enabled" id="speed_limit_down_enabled">
+                      <option value="false" selected>No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="speed_limit_up" class="col-sm-7 control-label">Maximum Upload Speed (KB/s)</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <input type="number" name="speed_limit_up" min="0" class="form-control" id="speed_limit_up" value="0">
+                    <input type="number" name="speed_limit_up" min="0" class="form-control" id="speed_limit_up">
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="speed_limit_up_enabled" class="col-sm-7 control-label">Maximum Upload Speed Limit Enabled</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="speed_limit_up_enabled">
-                      <option value="no" selected>No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="speed_limit_up_enabled" id="speed_limit_up_enabled">
+                      <option value="false" selected>No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -190,9 +190,9 @@ body {
                 <div class="form-group">
                   <label for="alt_speed_enabled" class="col-sm-6 control-label">Throttling Enabled</label>
                   <div class="col-sm-offset-3 col-sm-3 form-input">
-                    <select class="form-control" name="alt_speed_enabled">
-                      <option value="no" selected>No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="alt_speed_enabled" id="alt_speed_enabled">
+                      <option value="false" selected>No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -220,7 +220,7 @@ body {
                 <div class="form-group">
                   <label for="encryption" class="col-sm-7 control-label">Encryption</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="encryption">
+                    <select class="form-control" name="encryption" id="encryption">
                       <option value="preferred">Preferred</option>
                       <option value="required">Required</option>
                       <option value="tolerated">Tolerated</option>
@@ -230,9 +230,9 @@ body {
                 <div class="form-group">
                   <label for="dht_enabled" class="col-sm-7 control-label">Enable DHT (Distributed Hash Tables)</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="dht_enabled">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="dht_enabled" id="dht_enabled">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -254,9 +254,9 @@ body {
                 <div class="form-group">
                   <label for="download_queue_enabled" class="col-sm-7 control-label">Enable Simultaneous Downloads Limit</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="download_queue_enabled">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="download_queue_enabled" id="download_queue_enabled">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -272,9 +272,9 @@ body {
                 <div class="form-group">
                   <label for="seed_queue_enabled" class="col-sm-7 control-label">Enable Simultaneous Uploads Limit</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="seed_queue_enabled">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="seed_queue_enabled" id="seed_queue_enabled">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -287,9 +287,9 @@ body {
                 <div class="form-group">
                   <label for="seedRatioLimited" class="col-sm-7 control-label">Enable Seeding Ratio Limit</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="seedRatioLimited">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="seedRatioLimited" id="seedRatioLimited">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -305,27 +305,27 @@ body {
                 <div class="form-group">
                   <label for="peer_port_random_on_start" class="col-sm-7 control-label">Randomize Peer Port on Startup</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="peer_port_random_on_start">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="peer_port_random_on_start" id="peer_port_random_on_start">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="lpd_enabled" class="col-sm-7 control-label">Local Peer Discovery</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="lpd_enabled">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="lpd_enabled" id="lpd_enabled">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="pex_enabled" class="col-sm-7 control-label">Enable Peer Exchange</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="pex_enabled">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="pex_enabled" id="pex_enabled">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -338,7 +338,7 @@ body {
                 <div class="form-group">
                   <label for="peer_limit_per_torrent" class="col-sm-7 control-label">Peer Limit per Torrent</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <input type="number" name="peer_limit_per_torrent" min="0" class="form-control" id="peer_limit_per_torrent" value="test">
+                    <input type="number" name="peer_limit_per_torrent" min="0" class="form-control" id="peer_limit_per_torrent" value="55">
                   </div>
                 </div>
 
@@ -382,27 +382,27 @@ body {
                 <div class="form-group">
                   <label for="incomplete_dir_enabled" class="col-sm-7 control-label">Enable Incomplete Download Directory</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="incomplete_dir_enabled">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="incomplete_dir_enabled" id="incomplete_dir_enabled">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="rename_partial_files" class="col-sm-7 control-label">Append ".part" to incomplete downloads</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="rename_partial_files">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="rename_partial_files" id="rename_partial_files">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="trash_original_torrent_files" class="col-sm-7 control-label">Delete ".torrent" file after adding torrent</label>
                   <div class="col-sm-offset-2 col-sm-3 form-input">
-                    <select class="form-control" name="trash_original_torrent_files">
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                    <select class="form-control" name="trash_original_torrent_files" id="trash_original_torrent_files">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
                     </select>
                   </div>
                 </div>
@@ -413,12 +413,12 @@ body {
               about the transmission client
             </div> <!-- /div#about -->
           
-          </div>
+          </div> <!-- /div#tab-content -->
 
-          </div> <!-- /#settings-tabs-container -->
+        </div> <!-- /div#settings-tabs-container -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div><!-- /.modal-content -->
@@ -429,16 +429,15 @@ body {
 
 /********* Global properties *********/
 
-var checked_row_color = 'warning' // color each row will turn when its checkbox is checked
+var checked_row_color = 'warning'; // color each row will turn when its checkbox is checked
+var async_url = window.location.protocol + '//' + window.location.host;
 
 /*************************************/
 
 var loadTorrentPanel = function(callback) {
   $('#torrent-panel').removeClass('hidden');
-  console.log(window.location.protocol);
-  console.log(window.location.host);
   $.get({
-    url: window.location.protocol + '//' + window.location.host + '/get_torrents',
+    url: async_url + '/get_torrents',
     dataType: 'json',
     success: function(torrents) {
       for(t in torrents) {
@@ -475,18 +474,18 @@ var loadTorrentPanel = function(callback) {
 
         /***** Create a list of table cells to be appended to the table row later *****/
         var tds = [
-        $(checkbox_td),
-        $('<td>', {'text': (parseInt(t) + 1), 'class': 'td-torrent-num'}),
-        $('<td>', {'text': torrent.name, 'class': 'td-torrent-name'}),
-        $(status_td),
-        $(progress_td),
-        $('<td>', {
-          'class': 'td-torrent-dateAdded',
-          'text': function() {
-            var date = new Date(parseInt(torrent.addedDate) * 1000);
-            return date.getFullYear() + '/' + parseInt(date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
-          },
-        }),
+          $(checkbox_td),
+          $('<td>', {'text': (parseInt(t) + 1), 'class': 'td-torrent-num'}),
+          $('<td>', {'text': torrent.name, 'class': 'td-torrent-name'}),
+          $(status_td),
+          $(progress_td),
+          $('<td>', {
+            'class': 'td-torrent-dateAdded',
+            'text': function() {
+              var date = new Date(parseInt(torrent.addedDate) * 1000);
+              return date.getFullYear() + '/' + parseInt(date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
+            },
+          }),
         ];
 
         var tr = $('<tr>', {'data-torrent-id': torrent.id});
@@ -500,8 +499,49 @@ var loadTorrentPanel = function(callback) {
   });
 }
 
-var populateSettings = function() {
+// Gets session settings, populates the settings modal, then executes callback();
+var populateSettings = function(callback) {
+  // Get the settings
+  $.get({
+    url: async_url + '/get_session_stats',
+    dataType: 'json',
+    success: function(settings) {
 
+      // populate the input fields within the settings modal
+      // by looping through the input ids, and setting the values accordingly.
+      // this is possible because the input ids are the same as the keys in the settings json object
+      var input_ids = [];
+      $('.settings-form input').each(function() {
+        input_ids.push($(this).attr('id'));
+      });
+      for(i in input_ids) {
+        key = input_ids[i];
+        $('#' + key).val(settings[key]);
+      }
+
+      // populate the select fields in a similar fashion to the way the input fields are populated
+      select_ids = [];
+      $('.settings-form select').each(function() {
+        select_ids.push($(this).attr('id'))
+      });
+      for(i in select_ids) {
+        key = select_ids[i];
+        setting_value = settings[key].toLowerCase();
+        console.log(setting_value);
+        $('#' + select_ids[i]).each(function() {
+          options = $(this).children();
+          options.each(function() {
+            if($(this).val().toLowerCase() == setting_value) {
+              $(this).prop('selected', 'true');
+              console.log('setting "' + key + '" changed');
+            }
+          })
+        });
+      }
+
+      callback();
+    }
+  });
 }
 
 var torrent_checkboxes;
@@ -564,6 +604,11 @@ $('#check-all-boxes').click(function() {
   }
 });
 
+$('#client-settings-btn').click(function() {
+  populateSettings(function() {
+    $('#settingsModal').modal();
+  });
+})
 
 /************ ENTRY POINT ***********/
 $(function() {

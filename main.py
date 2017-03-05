@@ -25,7 +25,7 @@ class TransmissionUI(object):
         return tc.get_session_stats()
 
     @cherrypy.expose
-    def set_session_alt_speed(self):
+    def set_session_properties(self):
         tc.set_session_properties()
         return 'stats set successfully'
 

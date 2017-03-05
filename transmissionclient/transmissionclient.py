@@ -75,6 +75,7 @@ class TransmissionClient(object):
         session = self._build_object_dict(self.client.session_stats())
         return session
 
-    def set_session_properties(self):
-        self.client.set_session(alt_speed_down=200)
+    def set_session_properties(self, props=None):
+        if props is not None:
+            pass
         self.session.update()
