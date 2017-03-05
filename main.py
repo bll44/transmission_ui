@@ -8,7 +8,7 @@ import time
 
 tc = TransmissionClient('localhost', 9091)
 
-class TransmissionControl(object):
+class TransmissionUI(object):
 
     def __init__(self):
         self.get_torrents()
@@ -19,9 +19,19 @@ class TransmissionControl(object):
         torrents = tc.get_torrents()
         return torrents
 
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def get_session_stats(self):
+        return tc.get_session_stats()
+
+    @cherrypy.expose
+    def set_session_alt_speed(self):
+        tc.set_session_properties()
+        return 'stats set successfully'
+
 
 if __name__ == '__main__':
-    cherrypy.quickstart(TransmissionControl(), '/',
+    cherrypy.quickstart(TransmissionUI(), '/',
                         {'/': {
                             'tools.staticdir.root': settings.html_dir,
                             'tools.staticdir.on': True,

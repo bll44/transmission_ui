@@ -5,20 +5,41 @@
  <link rel="shortcut icon" href="images/favicon.png">
  <title>TransmissionPy</title>
  <!-- Latest compiled and minified CSS -->
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
  <!-- Optional theme -->
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
  <!-- jquery 3.1.1 -->
  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
- crossorigin="anonymous"></script>
+      crossorigin="anonymous"></script>
 
  <!-- Latest compiled and minified JavaScript -->
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
+<style>
+body {
+  padding-top: 70px;
+}
+#network_bandwidth_form {
+  padding-top: 15px;
+}
+.settings-form .control-label {
+  text-align: left;
+}
+.settings-form .form-input {
+  text-align: right;
+}
+#settings-btn-link-li {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+</style>
 <body>
- <nav class="navbar navbar-default">
+ <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
    <!-- Brand and toggle get grouped for better mobile display -->
    <div class="navbar-header">
@@ -43,12 +64,27 @@
     <div class="form-group">
      <input type="text" class="form-control" placeholder="Torrent URL">
    </div>
-   <button type="submit" class="btn btn-default">Add Torrent</button>
+   <div class="btn-group">
+   <button type="button" class="btn btn-primary">Quick Add Torrent</button>
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="#">Add...</a></li>
+    </ul>
+  </div>
+   <!-- <button type="submit" class="btn btn-default">Add Torrent</button> -->
  </form>
  <!-- User dropdown menu -->
  <ul class="nav navbar-nav navbar-right">
+  <li id="settings-btn-link-li">
+    <button type="button" class="btn btn-default navbar-btn" id="client-settings-btn" data-toggle="modal" data-target="#settingsModal">Settings</a>
+  </li>
   <li class="dropdown">
-   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">&lt;current_user&gt; <span class="caret"></span></a>
+   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+    &lt;current_user&gt; <span class="caret"></span>
+   </a>
    <ul class="dropdown-menu">
     <li><a href="#">Preferences</a></li>
     <li role="separator" class="divider"></li>
@@ -62,12 +98,13 @@
 <div class="container-fluid">
   <div class="row">
    <div class="col-sm-12">
-     <div class="panel panel-default hidden" id="torrent-panel">
+   <div class="table-responsive">
+     <!-- <div class="panel panel-default hidden table-responsive" id="torrent-panel"> -->
       <!-- Default panel contents -->
-      <div class="panel-heading">Torrents</div>
+      <!-- <div class="panel-heading">Torrents</div> -->
 
       <!-- Table -->
-      <table class="table table-striped">
+      <table class="table table-striped table-responsive">
        <thead>
         <tr>
          <td><input type="checkbox" id="check-all-boxes"></td>
@@ -81,15 +118,319 @@
      <tbody id="torrent-list-tablebody">
      </tbody>
    </table>
- </div>
+ <!-- </div> -->
+ <!-- /div#torrent-panel -->
+ <!-- </div>  -->
+ <!-- /div.table-responsive -->
 </div>
 </div>
 </div>
+<!-- Settings modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="settingsModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Settings</h4>
+      </div>
+      <div class="modal-body">
+        <div id="settings-tabs-container">
+
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li role="presentation" class="active"><a href="#network_bandwidth" aria-controls="network_bandwidth" role="tab" data-toggle="tab">Network/Bandwidth</a></li>
+            <li role="presentation"><a href="#security" aria-controls="security" role="tab" data-toggle="tab">Security</a></li>
+            <li role="presentation"><a href="#queuing_seeding_peering" aria-controls="queuing_seeding" role="tab" data-toggle="tab">Queuing/Seeding/Peering</a></li>
+            <li role="presentation"><a href="#directories_caching" aria-controls="directories_caching" role="tab" data-toggle="tab">Directories/Caching</a></li>
+            <li role="presentation"><a href="#about" aria-controls="about" role="tab" data-toggle="tab">About</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            
+            <div role="tabpanel" class="tab-pane active" id="network_bandwidth">
+              <form id="network_bandwidth_form" class="form-horizontal settings-form">
+
+                <!-- Bandwidth Limitation settings -->
+                <h4>Bandwidth Limitations</h4>
+                <div class="form-group">
+                  <label for="speed_limit_down" class="col-sm-7 control-label">Maximum Download Speed (KB/s)</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="speed_limit_down" min="0" class="form-control" id="speed_limit_down" value="0">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="speed_limit_down_enabled" class="col-sm-7 control-label">Maximum Download Speed Limit Enabled</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="speed_limit_down_enabled">
+                      <option value="no" selected>No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="speed_limit_up" class="col-sm-7 control-label">Maximum Upload Speed (KB/s)</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="speed_limit_up" min="0" class="form-control" id="speed_limit_up" value="0">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="speed_limit_up_enabled" class="col-sm-7 control-label">Maximum Upload Speed Limit Enabled</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="speed_limit_up_enabled">
+                      <option value="no" selected>No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <hr>
+
+                <!-- Throttled Bandwidth Limitation settings -->
+                <h4>Torrent Throttling Speeds</h4>
+                <div class="form-group">
+                  <label for="alt_speed_enabled" class="col-sm-6 control-label">Throttling Enabled</label>
+                  <div class="col-sm-offset-3 col-sm-3 form-input">
+                    <select class="form-control" name="alt_speed_enabled">
+                      <option value="no" selected>No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="alt_speed_down" class="col-sm-6 control-label">Throttled Max Download Speed (KB/s)</label>
+                  <div class="col-sm-offset-3 col-sm-3 form-input">
+                    <input type="number" name="alt_speed_down" min="0" class="form-control" id="alt_speed_down" value="0">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="alt_speed_up" class="col-sm-6 control-label">Throttled Max Upload Speed (KB/s)</label>
+                  <div class="col-sm-offset-3 col-sm-3 form-input">
+                    <input type="number" name="alt_speed_up" min="0" class="form-control" id="alt_speed_up" value="0">
+                  </div>
+                </div>
+
+              </form>
+            </div> <!-- /div#network_bandwidth -->
+            
+            <div role="tabpanel" class="tab-pane" id="security">
+              <form id="security_form" class="form-horizontal settings-form">
+
+                <!-- Security settings -->
+                <h4>Security</h4>
+                <div class="form-group">
+                  <label for="encryption" class="col-sm-7 control-label">Encryption</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="encryption">
+                      <option value="preferred">Preferred</option>
+                      <option value="required">Required</option>
+                      <option value="tolerated">Tolerated</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="dht_enabled" class="col-sm-7 control-label">Enable DHT (Distributed Hash Tables)</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="dht_enabled">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+
+              </form>
+            </div> <!-- /div#security -->
+
+            <div role="tabpanel" class="tab-pane" id="queuing_seeding_peering">
+              <form id="queuing_seeding_peering_form" class="form-horizontal settings-form">
+
+                <!-- Queuing/Seeding/Peering settings -->
+                <h4>Queuing</h4>
+                <div class="form-group">
+                  <label for="download_queue_size" class="col-sm-7 control-label">Max Simultaneous Downloads</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="download_queue_size" min="0" class="form-control" id="download_queue_size">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="download_queue_enabled" class="col-sm-7 control-label">Enable Simultaneous Downloads Limit</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="download_queue_enabled">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <hr>
+
+                <h4>Seeding</h4>
+                <div class="form-group">
+                  <label for="seed_queue_size" class="col-sm-7 control-label">Max Simultaneous Uploads <small>(Max Seeding Torrents)</small></label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="seed_queue_size" min="0" class="form-control" id="seed_queue_size">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="seed_queue_enabled" class="col-sm-7 control-label">Enable Simultaneous Uploads Limit</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="seed_queue_enabled">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="seedRatioLimit" class="col-sm-7 control-label">Seeding Ratio Limit</small></label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="seedRatioLimit" min="0" class="form-control" id="seedRatioLimit">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="seedRatioLimited" class="col-sm-7 control-label">Enable Seeding Ratio Limit</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="seedRatioLimited">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <hr>
+
+                <h4>Peering</h4>
+                <div class="form-group">
+                  <label for="peer_port" class="col-sm-7 control-label">Peer Port Number</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="peer_port" min="0" class="form-control" id="peer_port">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="peer_port_random_on_start" class="col-sm-7 control-label">Randomize Peer Port on Startup</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="peer_port_random_on_start">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="lpd_enabled" class="col-sm-7 control-label">Local Peer Discovery</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="lpd_enabled">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="pex_enabled" class="col-sm-7 control-label">Enable Peer Exchange</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="pex_enabled">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="peer_limit_global" class="col-sm-7 control-label">Maximum Total Peers <small>(all torrents combined)</small></label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="peer_limit_global" min="0" class="form-control" id="peer_limit_global">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="peer_limit_per_torrent" class="col-sm-7 control-label">Peer Limit per Torrent</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="peer_limit_per_torrent" min="0" class="form-control" id="peer_limit_per_torrent" value="test">
+                  </div>
+                </div>
+
+              </form>
+            </div> <!-- /div#queuing_seeding -->
+            
+            <div role="tabpanel" class="tab-pane" id="directories_caching">
+              <form id="directories_caching_form" class="form-horizontal settings-form">
+
+                <h4>Caching</h4>
+                <div class="form-group">
+                  <label for="cache_size_mb" class="col-sm-7 control-label">Disk Cache Size (MB)</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <input type="number" name="cache_size_mb" min="4" class="form-control" id="cache_size_mb">
+                  </div>
+                </div>
+                <hr>
+
+                <h4>Directories</h4>
+                <div class="form-group">
+                  <label for="config_dir" class="col-sm-5 control-label">Configuration Directory</label>
+                  <div class="col-sm-7 form-input">
+                    <input type="text" name="config_dir" min="4" class="form-control" 
+                      id="config_dir" placeholder="/path/to/transmission/config/directory">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="download_dir" class="col-sm-5 control-label">Downloads Directory</label>
+                  <div class="col-sm-7 form-input">
+                    <input type="text" name="download_dir" min="4" class="form-control" 
+                      id="download_dir" placeholder="/path/to/downloads/directory">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="incomplete_dir" class="col-sm-5 control-label">Incomplete Downloads Directory</label>
+                  <div class="col-sm-7 form-input">
+                    <input type="text" name="incomplete_dir" min="4" class="form-control" 
+                      id="incomplete_dir" placeholder="/path/to/incomplete/downloads/directory">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="incomplete_dir_enabled" class="col-sm-7 control-label">Enable Incomplete Download Directory</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="incomplete_dir_enabled">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="rename_partial_files" class="col-sm-7 control-label">Append ".part" to incomplete downloads</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="rename_partial_files">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="trash_original_torrent_files" class="col-sm-7 control-label">Delete ".torrent" file after adding torrent</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="trash_original_torrent_files">
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div> <!-- /div#directories -->
+            
+            <div role="tabpanel" class="tab-pane" id="about">
+              about the transmission client
+            </div> <!-- /div#about -->
+          
+          </div>
+
+          </div> <!-- /#settings-tabs-container -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 <script>
 
 /********* Global properties *********/
+
 var checked_row_color = 'warning' // color each row will turn when its checkbox is checked
+
 /*************************************/
 
 var loadTorrentPanel = function(callback) {
@@ -113,8 +454,7 @@ var loadTorrentPanel = function(callback) {
         progressbar_div = $('<div>', {'class': 'progress-bar', 'role': 'progressbar', 'aria-valuenow': progress_percent_value,
                                       'aria-valuemin': '0', 'aria-valuemax': '100', 'style': 'width: ' + progress_percent_value + '%;'});
         progressbar_span = $('<span>', {'class': '', 'text': progress_percent_value + '%'});
-        // progress_td.append(progress_wrapper_div.append(progressbar_div.append(progressbar_span)));
-        // progress_td.append(progress_wrapper_div.append(progressbar_div)).append(progressbar_span);
+        // combine the separate elements for insertion
         progress_td.append(progressbar_span).append(progress_wrapper_div.append(progressbar_div));
 
         /***** Build the 'status' table cell *****/
@@ -148,15 +488,20 @@ var loadTorrentPanel = function(callback) {
           },
         }),
         ];
+
         var tr = $('<tr>', {'data-torrent-id': torrent.id});
         for(i in tds) {
           tr.append(tds[i]);
         }
         $('#torrent-list-tablebody').append(tr);
       }
-      callback()
+      callback() // callback necessary to attach events to torrent list once completely loaded
     }
   });
+}
+
+var populateSettings = function() {
+
 }
 
 var torrent_checkboxes;

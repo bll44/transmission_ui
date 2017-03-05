@@ -15,10 +15,21 @@ class TransmissionClient(object):
         """
         self.hostname = hostname
         self.port = port
-        self.connect()
-
-    def connect(self):
         self.client = transmissionrpc.Client(self.hostname, self.port)
+        self.session = transmissionrpc.Session(self.client)
+
+    def _build_object_dict(self, object=None):
+        """
+        Create a python dictionary from a Transmission RPC object
+        :param object: Transmission RPC object (Session, Torrent)
+        :return: json compatible python dictionary containing key value pairs of rpc object
+        """
+        if object is not None:
+            od = {}
+            keys = list(object._fields.keys())
+            for k in keys:
+                od[k] = str(object._fields[k].value)
+            return od
 
     def add_torrent(self, url):
         """
@@ -39,16 +50,12 @@ class TransmissionClient(object):
 
     def get_torrents(self):
         """
-        :return: a list of all torrents in JSON format currently available in the client
+        :return: json compatible list of all torrents currently listed in the Tranmission client
         """
         torrents = self.client.get_torrents()
         torrent_list = []
         for t in torrents:
-            torrent = {}
-            keys = list(t._fields.keys())
-            t_dict = t.__dict__
-            for k in keys:
-                torrent[k] = str(t_dict['_fields'][k].value)
+            torrent = self._build_object_dict(t)
             torrent_list.append(torrent)
         return torrent_list
 
@@ -59,3 +66,15 @@ class TransmissionClient(object):
         :param torrent_id: id of the torrent to remove
         """
         self.client.remove_torrent(torrent_id, delete_data)
+
+    def get_session_stats(self):
+        """
+        Gets the Tranmission Client session object
+        :return: json compatible session object
+        """
+        session = self._build_object_dict(self.client.session_stats())
+        return session
+
+    def set_session_properties(self):
+        self.client.set_session(alt_speed_down=200)
+        self.session.update()
