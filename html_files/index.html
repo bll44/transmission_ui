@@ -527,13 +527,11 @@ var populateSettings = function(callback) {
       for(i in select_ids) {
         key = select_ids[i];
         setting_value = settings[key].toLowerCase();
-        console.log(setting_value);
         $('#' + select_ids[i]).each(function() {
           options = $(this).children();
           options.each(function() {
             if($(this).val().toLowerCase() == setting_value) {
               $(this).prop('selected', 'true');
-              console.log('setting "' + key + '" changed');
             }
           })
         });
@@ -584,8 +582,6 @@ function checkAllRows() {
 }
 
 function toggleRowHighlight() {
-  console.log('row highlight');
-  console.log('checkbox count: ' + $('.torrent-checkbox').length);
   $('.torrent-checkbox').each(function() {
     var parent_row = $(this).parent().parent();
     if($(this).prop('checked')) {
