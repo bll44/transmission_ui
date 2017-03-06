@@ -1,6 +1,6 @@
 import transmissionrpc
 import os
-import urllib.parse
+from urllib3.util.url import parse_url
 from pprint import pprint
 
 
@@ -33,22 +33,23 @@ class TransmissionClient(object):
                 od[k] = str(object._fields[k].value)
             return od
 
-    def add_torrent(self, url):
+    def add_torrent(self, data):
         """
         :param url: the download url of the torrent to download
         :return: torrent object that was just added
         """
-        sub_download_dir = urllib.parse.urlsplit(url).hostname
-        download_dir = self._ROOT_DOWNLOAD_DIR + '/' + sub_download_dir
+        url = data['torrent_download_url']
+        sub_download_dir = parse_url(url).hostname
+        download_dir = os.path.join(self._ROOT_DOWNLOAD_DIR, sub_download_dir)
         torrent = self.client.add_torrent(url, paused=True, download_dir=download_dir)
-        self.start_torrent(torrent.id)
-        return torrent
+        # self.start_torrent(torrent.id)
+        return self._build_object_dict(torrent)
 
-    def start_torrent(self, torrent_id):
+    def start_torrent(self, id):
         """
-        :param torrent_id: id of the torrent to be started
+        :param id: the id of the torrent to be resumed
         """
-        self.client.start_torrent(torrent_id)
+        self.client.start_torrent(id)
 
     def get_torrents(self):
         """

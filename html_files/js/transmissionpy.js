@@ -208,10 +208,23 @@ var saveSettings = function(callback=function(){}) {
 
 /***** Add torrent function *****/
 var add_torrent = function(url, callback=function(){}) {
-  if(url.indexOf('.torrent') < 0) {
-    console.log('invalid url');
-    displayMainError('Invalid download URL. Only torrent download URL\'s are accepted.');
-  }
+  $.ajax({
+    url: async_url + '/quick_add_torrent',
+    type: 'POST',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify({torrent_download_url: url}),
+    success: function(data, status, xhr) {
+      if(xhr.status == 200) {
+        alert = alertElement({
+          'type': 'success',
+          'id': '',
+          'text': 'Torrent "' + data.name + '" successfully added'
+        })
+        $('#main-alert-container').append(alert);
+      }
+    }
+  })
   callback.call()
 }
 $('#quick-add-torrent-btn').click(function() {
@@ -250,10 +263,17 @@ var alertElement = function(alertOptions) {
     'id': alertOptions['id'],
     'text': alertOptions['text'],
   };
+  var success_icon = 'glyphicon-ok-circle';
+  var error_icon = 'glyphicon-exclamation-sign';
+  if(alertOptions['type'] == 'success') {
+    var icon = success_icon;
+  } else if (alertOptions['type'] == 'danger') {
+    var icon = error_icon;
+  }
   var alert = $('<div>', {'class': 'alert ' + options['type'] + ' ' + options['dismissible'], 'role': 'alert', 'id': options['id']});
   var dismiss_btn = $('<button>', {'type': 'button', 'class': 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'});
   var dismiss_btn_span = $('<span>', {'aria-hidden': 'true', 'html': '&times;'});
-  var alert_strong_text = $('<strong>', {'html': '<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;'});
+  var alert_strong_text = $('<strong>', {'html': '<span class="glyphicon ' + icon + '"></span>&nbsp;&nbsp;'});
   var alert_description = options['text'];
   return alert.append(dismiss_btn.append(dismiss_btn_span)).append(alert_strong_text)
                                                            .append(alert_description);
@@ -280,7 +300,7 @@ $('#client-settings-btn').click(function() {
   populateSettings(function() {
     $('#settingsModal').modal();
   });
-})
+});
 
 $('#save-settings-btn').click(function() {
   saveSettings(function() {
