@@ -25,12 +25,16 @@ class TransmissionUI(object):
         return tc.get_session_stats()
 
     @cherrypy.expose
-    @cherrypy.tools.json_out()
     @cherrypy.tools.json_in()
     def set_session_properties(self):
         data = cherrypy.request.json
         tc.set_session_properties(data)
-        return 'stats set successfully'
+
+    @cherrypy.expose
+    @cherrypy.tools.json_in()
+    def quick_add_torrent(self):
+        data = cherrypy.request.json
+        tc.add_torrent(data['torrent_download_url'])
 
 if __name__ == '__main__':
     cherrypy.quickstart(TransmissionUI(), '/',

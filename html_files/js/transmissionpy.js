@@ -18,6 +18,31 @@ var load_config = function(callback=function(){}) {
   })
 }
 
+var torrent_checkboxes;
+var loadCheckBoxes = function() {
+  var lastChecked = null;
+  torrent_checkboxes = $('.torrent-checkbox');
+  torrent_checkboxes.click(function(e) {
+    if( ! lastChecked) {
+      lastChecked = this;
+      return;
+    }
+
+    if(e.shiftKey) {
+      var start = torrent_checkboxes.index(this);
+      var end = torrent_checkboxes.index(lastChecked);
+
+      torrent_checkboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastChecked.checked);
+      toggleRowHighlight();
+    }
+
+    lastChecked = this;
+  });
+  $('.torrent-checkbox').on('change', function() {
+    toggleRowHighlight();
+  });
+}
+
 var loadTorrentPanel = function(callback) {
   $('#torrent-panel').removeClass('hidden');
   $.get({
@@ -169,44 +194,30 @@ var saveSettings = function(callback=function(){}) {
     },
     error: function(xhr, textStatus, error) {
       // add error alert to modal if the request fails...
-      var alert = $('<div>', {'class': 'alert alert-danger alert-dismissible', 'role': 'alert', 'id': 'settings-save-error-alert'});
-      var dismiss_btn = $('<button>', {'type': 'button', 'class': 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'});
-      var dismiss_btn_span = $('<span>', {'aria-hidden': 'true', 'html': '&times;'});
-      var alert_strong_text = $('<strong>', {'html': '<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;'});
-      var alert_description_line_1 = 'Saving your settings failed for the following reason: <i><b>' + xhr.status + ' ' + error + '</b></i>';
-      var alert_description_line_2 = '<br>Please check that your Transmission client is running and the web interface is enabled.';
-      $('#settingsModal .modal-body').append(alert.append(dismiss_btn.append(dismiss_btn_span)).append(alert_strong_text)
-                                                  .append(alert_description_line_1)
-                                                  .append(alert_description_line_2));
+      var alert = alertElement({
+        'type': 'danger',
+        'id': 'settings-save-error-alert',
+        'text': 'Saving your settings failed for the following reason: <b>' + xhr.status + ' ' + error + '</b>' +
+                '<br>This usually means your Transmission client is not running, or the web interface is not enabled.',
+      });
+      $('#settingsModal .modal-body').append(alert);
     }
   });
 
 } // end saveSettings function
 
-var torrent_checkboxes;
-var loadCheckBoxes = function() {
-  var lastChecked = null;
-  torrent_checkboxes = $('.torrent-checkbox');
-  torrent_checkboxes.click(function(e) {
-    if( ! lastChecked) {
-      lastChecked = this;
-      return;
-    }
-
-    if(e.shiftKey) {
-      var start = torrent_checkboxes.index(this);
-      var end = torrent_checkboxes.index(lastChecked);
-
-      torrent_checkboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastChecked.checked);
-      toggleRowHighlight();
-    }
-
-    lastChecked = this;
-  });
-  $('.torrent-checkbox').on('change', function() {
-    toggleRowHighlight();
-  });
+/***** Add torrent function *****/
+var add_torrent = function(url, callback=function(){}) {
+  if(url.indexOf('.torrent') < 0) {
+    console.log('invalid url');
+    displayMainError('Invalid download URL. Only torrent download URL\'s are accepted.');
+  }
+  callback.call()
 }
+$('#quick-add-torrent-btn').click(function() {
+  var torrent_download_url = $('#torrent-url-input').val();
+  add_torrent(torrent_download_url);
+});
 
 function uncheckAllRows() {
   $('.torrent-checkbox').each(function() {
@@ -231,6 +242,30 @@ function toggleRowHighlight() {
       parent_row.removeClass(checked_row_color);
     }
   });
+}
+
+var alertElement = function(alertOptions) {
+  var options = {
+    'type': 'alert-' + alertOptions['type'],
+    'id': alertOptions['id'],
+    'text': alertOptions['text'],
+  };
+  var alert = $('<div>', {'class': 'alert ' + options['type'] + ' ' + options['dismissible'], 'role': 'alert', 'id': options['id']});
+  var dismiss_btn = $('<button>', {'type': 'button', 'class': 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'});
+  var dismiss_btn_span = $('<span>', {'aria-hidden': 'true', 'html': '&times;'});
+  var alert_strong_text = $('<strong>', {'html': '<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;'});
+  var alert_description = options['text'];
+  return alert.append(dismiss_btn.append(dismiss_btn_span)).append(alert_strong_text)
+                                                           .append(alert_description);
+}
+
+var displayMainError = function(errorText) {
+  var alert = alertElement({
+    'type': 'danger',
+    'id': '',
+    'text': errorText,
+  });
+  $('#main-alert-container').append(alert);
 }
 
 $('#check-all-boxes').click(function() {
@@ -271,6 +306,5 @@ var init_app = function() {
 }
 // start the application
 $(function() {
-  console.log('test');
   init_app();
 })
