@@ -167,6 +167,7 @@ var saveSettings = function(callback=function(){}) {
     }
   });
   var settings_json_string = JSON.stringify(settings);
+  $('#save-settings-btn').html('<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>');
   $.ajax({
     url: async_url + '/set_session_properties',
     type: 'POST',
@@ -190,7 +191,7 @@ var saveSettings = function(callback=function(){}) {
         var alert_description = 'An unknown error occurred when trying to save your settings.';
         $('#settingsModal .modal-body').append(alert.append(dismiss_btn.append(dismiss_btn_span)).append(alert_strong_text).append(alert_description));
       }
-      client_settings = settings;
+      load_config();
     },
     error: function(xhr, textStatus, error) {
       // add error alert to modal if the request fails...
@@ -279,6 +280,23 @@ var alertElement = function(alertOptions) {
                                                            .append(alert_description);
 }
 
+var updateDiskFreeSpaceDisplays = function() {
+  var free_space = (client_settings['download_dir_free_space'] / 1000000000).toFixed(2);
+  if(free_space >= 150) {
+    var textClass = 'text-success';
+  } else if(free_space >= 75) {
+    var textClass = 'text-warning';
+  } else {
+    var textClass = 'text-danger';
+  }
+  var free_space_elements = $('.disk-free-space');
+  free_space_elements.each(function() {
+    $(this).removeClass().addClass('.disk-free-space');
+    $(this).addClass(textClass);
+    $(this).text(free_space + ' GB');
+  });
+}
+
 var displayMainError = function(errorText) {
   var alert = alertElement({
     'type': 'danger',
@@ -308,6 +326,20 @@ $('#save-settings-btn').click(function() {
   });
 });
 
+$('#addWithOptionsModal').on('show.bs.modal', function(e) {
+  if(client_settings['incomplete_dir_enabled'] == 'True') {
+    $('#location-while-downloading').text(client_settings['incomplete_dir']);
+  } else {
+    $('#location-while-downloading').text(client_settings['download_dir']);
+  }
+  $('#download-complete-location').text(client_settings['download_dir']);
+});
+
+$('#add-with-options').click(function() {
+  updateDiskFreeSpaceDisplays();
+  $('#addWithOptionsModal').modal('show');
+});
+
 /***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
 $('#settingsModal').on('hidden.bs.modal', function(e) {
   save_settings_btn = $('#save-settings-btn');
@@ -316,6 +348,17 @@ $('#settingsModal').on('hidden.bs.modal', function(e) {
                    .html('Save changes')
                    .attr('disabled', false);
   if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+$(function() {
+  $.post({
+    url: async_url + '/set_custom_settings',
+    contentType: 'application/json',
+    data: JSON.stringify({'test': 'test_data'}),
+    success: function(data) {
+      console.log(data);
+    }
+  });
 });
 
 /************ ENTRY POINT ***********/
@@ -327,4 +370,4 @@ var init_app = function() {
 // start the application
 $(function() {
   init_app();
-})
+});

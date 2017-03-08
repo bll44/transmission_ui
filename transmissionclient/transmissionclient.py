@@ -2,7 +2,8 @@ import transmissionrpc
 import os
 from urllib3.util.url import parse_url
 from pprint import pprint
-
+import json
+import settings
 
 class TransmissionClient(object):
 
@@ -84,3 +85,9 @@ class TransmissionClient(object):
                 settings.pop(p, None)
             self.client.set_session(**settings)
         self.session.update()
+
+    def set_custom_settings(self, settings_data):
+        with open(settings.custom_settings_file, 'w') as outfile:
+            json.dump(settings_data, outfile)
+        saved_data = open(settings.custom_settings_file, 'r').read()
+        return json.loads(saved_data)
