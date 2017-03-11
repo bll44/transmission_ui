@@ -326,6 +326,28 @@ $('#save-settings-btn').click(function() {
   });
 });
 
+var setDownloadCompleteDirByHostname = function() {
+  var download_dir = $('#download-complete-location').text();
+  var download_url = $('#torrent_url_w_options').val();
+  if(download_url.length > 0) {
+    var url = document.createElement('a');
+    url.href = download_url;
+    last_index = download_url[download_url.length - 1];
+    if($('#sort-by-site-checkbox').prop('checked')) {
+      if(last_index == '/' || last_index == '\\') {
+        dl_complete_dir = download_dir + url.hostname;
+      } else {
+        dl_complete_dir = download_dir + '/' + url.hostname;
+      }
+      $('#download-complete-location').text(dl_complete_dir);
+    }
+  }
+}
+
+$('#torrent_url_w_options').focusout(function() {
+  setDownloadCompleteDirByHostname();
+});
+
 $('#addWithOptionsModal').on('show.bs.modal', function(e) {
   if(client_settings['incomplete_dir_enabled'] == 'True') {
     $('#location-while-downloading').text(client_settings['incomplete_dir']);
@@ -340,6 +362,16 @@ $('#add-with-options').click(function() {
   $('#addWithOptionsModal').modal('show');
 });
 
+$('#sort-by-site-checkbox').on('change', function() {
+  if($(this).prop('checked')) {
+    $('#custom-download-dir').hide();
+    setDownloadCompleteDirByHostname();
+  } else {
+    $('#custom-download-dir').show();
+    $('#download-complete-location').text(client_settings['download_dir']);
+  }
+});
+
 /***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
 $('#settingsModal').on('hidden.bs.modal', function(e) {
   save_settings_btn = $('#save-settings-btn');
@@ -348,17 +380,6 @@ $('#settingsModal').on('hidden.bs.modal', function(e) {
                    .html('Save changes')
                    .attr('disabled', false);
   if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
-});
-
-$(function() {
-  $.post({
-    url: async_url + '/set_custom_settings',
-    contentType: 'application/json',
-    data: JSON.stringify({'test': 'test_data'}),
-    success: function(data) {
-      console.log(data);
-    }
-  });
 });
 
 /************ ENTRY POINT ***********/
