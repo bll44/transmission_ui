@@ -91,3 +91,7 @@ class TransmissionClient(object):
             json.dump(settings_data, outfile)
         saved_data = open(settings.custom_settings_file, 'r').read()
         return json.loads(saved_data)
+
+    def get_custom_settings(self):
+        custom_settings = open(settings.custom_settings_file, 'r').read()
+        return json.loads(custom_settings)

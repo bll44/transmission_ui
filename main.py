@@ -45,6 +45,11 @@ class TransmissionUI(object):
         print(data)
         return tc.set_custom_settings(data)
 
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def get_custom_settings(self):
+        return tc.get_custom_settings()
+
 
 if __name__ == '__main__':
     cherrypy.quickstart(TransmissionUI(), '/',

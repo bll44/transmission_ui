@@ -29,13 +29,15 @@
 body {
   padding-top: 70px;
 }
-#network_bandwidth_form {
+.tab-pane form {
   padding-top: 15px;
 }
-.settings-form .control-label {
+.settings-form .control-label,
+.custom-settings-form .control-label {
   text-align: left;
 }
-.settings-form .form-input {
+.settings-form .form-input, 
+.custom-settings-form .form-input {
   text-align: right;
 }
 #settings-btn-link-li {
@@ -151,11 +153,11 @@ body {
             <li role="presentation"><a href="#queuing_seeding_peering" aria-controls="queuing_seeding" role="tab" data-toggle="tab">Queuing/Seeding/Peering</a></li>
             <li role="presentation"><a href="#directories_caching" aria-controls="directories_caching" role="tab" data-toggle="tab">Directories/Caching</a></li>
             <li role="presentation"><a href="#about" aria-controls="about" role="tab" data-toggle="tab">About</a></li>
+            <li role="presentation"><a href="#custom_settings" aria-controls="custom_settings" role="tab" data-toggle="tab">Custom</a></li>
           </ul>
 
           <!-- Tab panes -->
           <div class="tab-content">
-            
             <div role="tabpanel" class="tab-pane active" id="network_bandwidth">
               <form id="network_bandwidth_form" class="form-horizontal settings-form">
 
@@ -441,7 +443,19 @@ body {
             <div role="tabpanel" class="tab-pane" id="about">
               about the transmission client
             </div> <!-- /div#about -->
-          
+            <div role="tabpanel" class="tab-pane" id="custom_settings">
+              <form id="custom_settings_form" class="form-horizontal custom-settings-form">
+                <div class="form-group">
+                  <label for="default_sort_by_site" class="col-sm-7 control-label">Default to sort by site</label>
+                  <div class="col-sm-offset-2 col-sm-3 form-input">
+                    <select class="form-control" name="default_sort_by_site" id="default_sort_by_site">
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
+                    </select>
+                  </div>
+                </div>
+              </form> <!-- form.custom-settings-form -->
+            </div> <!-- /div#custom -->
           </div> <!-- /div#tab-content -->
 
         </div> <!-- /div#settings-tabs-container -->
@@ -469,23 +483,25 @@ body {
             <label for="torrent-url-wopts-url">Torrent Download URL</label>
             <input type="text" name="torrent-url-wopts-url" id="torrent_url_w_options" class="form-control" placeholder="https://example.com/torrentfile.torrent">
           </div>
-          <p>Data location while downloading:</p>
-          <div class="well well-sm"><span id="location-while-downloading" style="word-wrap: break-word;">&nbsp;</span></div>
-          <p>Data location when download finishes:</p>
-          <div class="well well-sm"><span id="download-complete-location" style="word-wrap: break-word;">&nbsp;</span></div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" id="sort-by-site-checkbox"> Sort by site
-            </label>
-          </div>
-          <div class="form-group">
-            <input type="text" name="custom-download-dir" id="custom-download-dir" class="form-control" placeholder="Optional custom location">
-          </div>
+          <div id="add-torrent-options-container" class="hidden">
+            <p>Data location while downloading:</p>
+            <div class="well well-sm"><span id="location-while-downloading" style="word-wrap: break-word;">&nbsp;</span></div>
+            <p>Data location when download finishes:</p>
+            <div class="well well-sm"><span id="download-complete-location" style="word-wrap: break-word;">&nbsp;</span></div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="sort-by-site-checkbox"> Sort by site
+              </label>
+            </div>
+            <div class="form-group">
+              <input type="text" name="custom-download-dir" id="custom-download-dir" class="form-control" placeholder="Optional custom location">
+            </div>
+          </div> <!-- /div#add-torrent-options-container -->
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add torrent</button>
+        <button type="button" class="btn btn-primary" id="add-torrent-btn">Add torrent</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

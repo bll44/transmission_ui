@@ -1,5 +1,6 @@
 /********* Global properties *********/
 var client_settings = {};
+var custom_settings = {};
 var checked_row_color = 'warning'; // color each row will turn when its checkbox is checked
 var async_url = window.location.protocol + '//' + window.location.host;
 /*************************************/
@@ -12,10 +13,20 @@ var load_config = function(callback=function(){}) {
       for(i in data) {
         client_settings[i] = data[i];
       }
-      // loads the torrent panel first.
-      callback.call();
+
+      $.get({
+        url: async_url + '/get_custom_settings',
+        dataType: 'json',
+        success: function(data) {
+          for(i in data) {
+            custom_settings[i] = data[i];
+          }
+          // loads the torrent panel first.
+          callback.call();
+        }
+      });
     }
-  })
+  });
 }
 
 var torrent_checkboxes;
@@ -110,6 +121,7 @@ var loadTorrentPanel = function(callback) {
 
 // Gets session settings, populates the settings modal, then executes callback();
 var populateSettings = function(callback=function(){}) {
+  var id, setting_value, key, settings;
   // Get the settings
   load_config(function() {
     settings = client_settings;
@@ -125,7 +137,7 @@ var populateSettings = function(callback=function(){}) {
     // populate the select fields in a similar fashion to the way the input fields are populated
     select_ids = [];
     $('.settings-form select').each(function() {
-      select_ids.push($(this).attr('id'))
+      select_ids.push($(this).attr('id'));
     });
     for(i in select_ids) {
       key = select_ids[i];
@@ -139,6 +151,23 @@ var populateSettings = function(callback=function(){}) {
         })
       });
     }
+
+    $('.custom-settings-form input, .custom-settings-form select').each(function() {
+      id = $(this).attr('id');
+      setting_value = custom_settings[id];
+      // element_ids.push($(this).attr('id'));
+      if($(this).prop('tagName').toLowerCase() == 'select') {
+
+        options = $(this).children();
+        options.each(function() {
+          if($(this).val().toLowerCase() == setting_value) {
+            $(this).prop('selected', 'true');
+          }
+        });
+      } else if($(this).prop('tagName').toLowerCase() == 'input') {
+        $(this).val(setting_value);
+      }
+    });
     // display the settings modal
     $('#settingsModal').modal('show');
 
@@ -149,6 +178,7 @@ var populateSettings = function(callback=function(){}) {
 
 /***** Save client settings when 'Save Changes' button is clicked in the settingsModal *****/
 var saveSettings = function(callback=function(){}) {
+  var settings;
   settings = {};
   $('.settings-form input, .settings-form select').each(function() {
 
@@ -171,6 +201,56 @@ var saveSettings = function(callback=function(){}) {
   $.ajax({
     url: async_url + '/set_session_properties',
     type: 'POST',
+    contentType: 'application/json',
+    data: settings_json_string,
+    success: function(data, status, xhr) {
+      if(xhr.status == 200) {
+        callback.call();
+      } else {
+        var alert = $('<div>', {'class': 'alert alert-danger alert-dismissible', 'role': 'alert', 'id': 'settings-save-error-alert'});
+        var dismiss_btn = $('<button>', {'type': 'button', 'class': 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'});
+        var dismiss_btn_span = $('<span>', {'aria-hidden': 'true', 'html': '&times;'});
+        var alert_strong_text = $('<strong>', {'html': '<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;'});
+        var alert_description = 'An unknown error occurred when trying to save your settings.';
+        $('#settingsModal .modal-body').append(alert.append(dismiss_btn.append(dismiss_btn_span)).append(alert_strong_text).append(alert_description));
+      }
+      load_config();
+    },
+    error: function(xhr, textStatus, error) {
+      // add error alert to modal if the request fails...
+      var alert = alertElement({
+        'type': 'danger',
+        'id': 'settings-save-error-alert',
+        'text': 'Saving your settings failed for the following reason: <b>' + xhr.status + ' ' + error + '</b>' +
+                '<br>This usually means your Transmission client is not running, or the web interface is not enabled.',
+      });
+      $('#settingsModal .modal-body').append(alert);
+    }
+  });
+
+} // end saveSettings function
+
+var saveCustomSettings = function(callback=function(){}) {
+  var settings, key, options, settings_json_string;
+  settings = {};
+  $('.custom-settings-form select, .custom-settings-form input').each(function() {
+    key = $(this).attr('id');
+    if($(this).prop('tagName').toLowerCase() == 'select') {
+      // if the element is a <select> tag
+      options = $(this).children();
+      options.each(function() {
+        if($(this).prop('selected')) {
+          settings[key] = $(this).val();
+        }
+      });
+    } else if($(this).prop('tagName').toLowerCase() == 'input') {
+      // if the element is a <input> tag
+      settings[key] = $(this).val();
+    }
+  });
+  settings_json_string = JSON.stringify(settings);
+  $.post({
+    url: async_url + '/set_custom_settings',
     contentType: 'application/json',
     data: settings_json_string,
     success: function(data, status, xhr) {
@@ -204,11 +284,10 @@ var saveSettings = function(callback=function(){}) {
       $('#settingsModal .modal-body').append(alert);
     }
   });
+}
 
-} // end saveSettings function
-
-/***** Add torrent function *****/
-var add_torrent = function(url, callback=function(){}) {
+/***** Add torrent functions *****/
+var quick_add_torrent = function(url, callback=function(){}) {
   $.ajax({
     url: async_url + '/quick_add_torrent',
     type: 'POST',
@@ -228,10 +307,13 @@ var add_torrent = function(url, callback=function(){}) {
   })
   callback.call()
 }
+
 $('#quick-add-torrent-btn').click(function() {
   var torrent_download_url = $('#torrent-url-input').val();
-  add_torrent(torrent_download_url);
+  quick_add_torrent(torrent_download_url);
 });
+
+
 
 function uncheckAllRows() {
   $('.torrent-checkbox').each(function() {
@@ -322,39 +404,79 @@ $('#client-settings-btn').click(function() {
 
 $('#save-settings-btn').click(function() {
   saveSettings(function() {
-    $('#settingsModal').modal('hide');
+    saveCustomSettings(function() {
+      $('#settingsModal').modal('hide');
+    });
   });
 });
 
-var setDownloadCompleteDirByHostname = function() {
-  var download_dir = $('#download-complete-location').text();
-  var download_url = $('#torrent_url_w_options').val();
-  if(download_url.length > 0) {
-    var url = document.createElement('a');
-    url.href = download_url;
-    last_index = download_url[download_url.length - 1];
-    if($('#sort-by-site-checkbox').prop('checked')) {
+var setDownloadCompleteDir = function(byHostname) {
+  var torrent_url_textbox = $('#torrent_url_w_options');
+  var download_dir = client_settings['download_dir'];
+  var download_url = torrent_url_textbox.val();
+  if(download_url.replace(/ /g, '').length <= 0) {
+    $('#download-complete-location').text(download_dir);
+    return false;
+  }
+  $('#add-torrent-options-container').removeClass('hidden');
+  if(byHostname) {
+    if(download_url.length > 0) {
+      var url = document.createElement('a');
+      url.href = download_url;
+      last_index = download_dir[download_dir.length - 1];
+      if($('#sort-by-site-checkbox').prop('checked')) {
+        if(last_index == '/' || last_index == '\\') {
+          dl_complete_dir = download_dir + url.hostname;
+        } else {
+          dl_complete_dir = download_dir + '/' + url.hostname;
+        }
+        $('#download-complete-location').text(dl_complete_dir);
+      }
+    }
+  } else {
+    var custom_dir = $('#custom-download-dir').val();
+    last_index = download_dir[download_dir.length - 1];
+    if( ! $('#sort-by-site-checkbox').prop('checked')) {
       if(last_index == '/' || last_index == '\\') {
-        dl_complete_dir = download_dir + url.hostname;
+        dl_complete_dir = download_dir + custom_dir;
       } else {
-        dl_complete_dir = download_dir + '/' + url.hostname;
+        dl_complete_dir = download_dir + '/' + custom_dir;
       }
       $('#download-complete-location').text(dl_complete_dir);
     }
   }
 }
 
-$('#torrent_url_w_options').focusout(function() {
-  setDownloadCompleteDirByHostname();
+$('#torrent_url_w_options, #custom-download-dir').on('input', function() {
+  if($('#sort-by-site-checkbox').prop('checked')) {
+    setDownloadCompleteDir(true);
+  } else {
+    setDownloadCompleteDir(false);
+  }
 });
 
 $('#addWithOptionsModal').on('show.bs.modal', function(e) {
+  var options_container = $('#add-torrent-options-container');
+  if( ! options_container.hasClass('hidden')) {
+    options_container.addClass('hidden');
+  }
   if(client_settings['incomplete_dir_enabled'] == 'True') {
     $('#location-while-downloading').text(client_settings['incomplete_dir']);
   } else {
     $('#location-while-downloading').text(client_settings['download_dir']);
   }
   $('#download-complete-location').text(client_settings['download_dir']);
+
+  $('#sort-by-site-checkbox').prop('checked', (custom_settings['default_sort_by_site'].toLowerCase() == 'true'));
+  if(custom_settings['default_sort_by_site'].toLowerCase() == 'true') {
+    $('#custom-download-dir').hide();
+  } else {
+    $('#custom-download-dir').show();
+  }
+});
+$('#addWithOptionsModal').on('hide.bs.modal', function(e) {
+  $('#torrent_url_w_options').val('');
+  $('#custom-download-dir').val('');
 });
 
 $('#add-with-options').click(function() {
@@ -364,8 +486,9 @@ $('#add-with-options').click(function() {
 
 $('#sort-by-site-checkbox').on('change', function() {
   if($(this).prop('checked')) {
+    $('#custom-download-dir').val('');
     $('#custom-download-dir').hide();
-    setDownloadCompleteDirByHostname();
+    setDownloadCompleteDir(true);
   } else {
     $('#custom-download-dir').show();
     $('#download-complete-location').text(client_settings['download_dir']);
