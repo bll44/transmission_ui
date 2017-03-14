@@ -293,7 +293,13 @@ var quick_add_torrent = function(url, callback=function(){}) {
     type: 'POST',
     contentType: 'application/json',
     dataType: 'json',
-    data: JSON.stringify({torrent_download_url: url}),
+    data: JSON.stringify({
+      torrent_download_url: url,
+      settings: {
+        'paused': false,
+        'download_dir': client_settings['download_dir']
+      }
+    }),
     success: function(data, status, xhr) {
       if(xhr.status == 200) {
         alert = alertElement({
@@ -447,6 +453,38 @@ var setDownloadCompleteDir = function(byHostname) {
   }
 }
 
+var buildAddTorrentFileList = function(files) {
+  var list_group = $('<ul>', {'class': 'list-group'});
+  var list_items = [];
+  for(i in files) {
+    file = files[i];
+    var li = $('<li>', {'class': 'list-group-item'});
+    var chkbox_div = $('<div>', {'class': 'checkbox'});
+    var label = $('<label>');
+    var input = $('<input>', {'class': 'torrent_file_list_item', 'type': 'checkbox'});
+    input.prop('checked', true);
+    var text = file['name'] + '&nbsp;&nbsp;';
+    var span = $('<span>', {'class': 'badge', 'text': (file['size'] / 1000000).toFixed(2) + ' MB'});
+    li.append(chkbox_div.append(label.append(input).append(text).append(span)));
+    list_group.append(li);
+  }
+  $('#torrent-files-list-container').append(list_group);
+}
+
+var getTorrentFileList = function(url, callback=function(){}) {
+  var matches = url.match(/^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/)
+  if(matches != null) {
+    $.post({
+      url: async_url + '/get_torrent_files',
+      data: JSON.stringify({'torrent_download_url': url}),
+      contentType: 'application/json',
+      success: function(data, status, xhr) {
+        callback(data);
+      }
+    });
+  }
+}
+
 $('#torrent_url_w_options, #custom-download-dir').on('input', function() {
   if($('#sort-by-site-checkbox').prop('checked')) {
     setDownloadCompleteDir(true);
@@ -455,20 +493,9 @@ $('#torrent_url_w_options, #custom-download-dir').on('input', function() {
   }
   if($(this).attr('id') == 'torrent_url_w_options') {
     url = $(this).val();
-    if(url.match(/^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/) != null) {
-      console.log('matched and getting file');
-      $.post({
-        url: async_url + '/get_tmp_torrent_file',
-        data: JSON.stringify({'url': url}),
-        contentType: 'application/json',
-        success: function(data, status, xhr) {
-          console.log(data);
-        },
-        error: function(xhr, textStatus, error) {
-          console.log(error);
-        }
-      });
-    }
+    getTorrentFileList(url, function(files) {
+      buildAddTorrentFileList(files);
+    });
   }
 });
 

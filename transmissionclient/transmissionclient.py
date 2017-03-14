@@ -39,16 +39,13 @@ class TransmissionClient(object):
                 od[k] = str(object._fields[k].value)
             return od
 
-    def add_torrent(self, data):
+    def add_torrent(self, url, settings=None):
         """
         :param url: the download url of the torrent to download
-        :return: torrent object that was just added
+        :param settings: dictionary containing kwargs to pass into add_torrent method of transmissionrpc
+        :return: the torrent object that was added
         """
-        url = data['torrent_download_url']
-        sub_download_dir = parse_url(url).hostname
-        download_dir = os.path.join(self._ROOT_DOWNLOAD_DIR, sub_download_dir)
-        torrent = self.client.add_torrent(url, paused=True, download_dir=download_dir)
-        # self.start_torrent(torrent.id)
+        torrent = self.client.add_torrent(url, **settings)
         return self._build_object_dict(torrent)
 
     def start_torrent(self, id):
@@ -114,6 +111,16 @@ class TransmissionClient(object):
         custom_settings = open(settings.custom_settings_file, 'r').read()
         return json.loads(custom_settings)
 
+    def get_torrent_files(self, data):
+        url = data['torrent_download_url']
+        settings = {'paused': True}
+        torrent = self.add_torrent(url, settings)
+        torrent_id = int(torrent['id'])
+        files = self.client.get_files(torrent_id)[torrent_id]
+        self.client.remove_torrent(torrent_id)
+        return files
+
+
     def download_tmp_torrent(self, url):
         try:
             http = urllib3.PoolManager()
@@ -132,5 +139,5 @@ class TransmissionClient(object):
         :param length: the total length of string to generate
         :return: randomly generated string
         """
-        return ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits)\
-                       for _ in range(length))
+        values = string.ascii_uppercase + string.ascii_lowercase + string.digits
+        return ''.join(random.choice(values) for _ in range(length))

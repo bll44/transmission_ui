@@ -3,11 +3,7 @@ import cherrypy
 import os
 import settings
 from pprint import pprint
-import urllib.parse
-import time
-import urllib3
-from bencodepy import decode_from_file, decode, decoder
-import collections
+import string
 
 tc = TransmissionClient('localhost', 9091)
 
@@ -38,7 +34,7 @@ class TransmissionUI(object):
     @cherrypy.tools.json_out()
     def quick_add_torrent(self):
         data = cherrypy.request.json
-        return tc.add_torrent(data)
+        return tc.add_torrent(data['torrent_download_url'], data['settings'])
 
     @cherrypy.expose
     @cherrypy.tools.json_in()
@@ -56,10 +52,9 @@ class TransmissionUI(object):
     @cherrypy.expose
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
-    def get_tmp_torrent_file(self):
+    def get_torrent_files(self):
         data = cherrypy.request.json
-        return tc.download_tmp_torrent(data['url'])
-
+        return tc.get_torrent_files(data)
 
 if __name__ == '__main__':
     cherrypy.quickstart(TransmissionUI(), '/',
@@ -77,3 +72,10 @@ if __name__ == '__main__':
                             'tools.staticdir.on': True,
                             'tools.staticdir.dir': 'js'
                         }})
+
+# if __name__ == '__main__':
+#     files = tc.client.get_files(12)[12]
+#     print(files)
+#     for key, val in enumerate(files):
+#         print('key: ' + str(key))
+#         print(files[key])
