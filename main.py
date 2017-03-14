@@ -5,6 +5,9 @@ import settings
 from pprint import pprint
 import urllib.parse
 import time
+import urllib3
+from bencodepy import decode_from_file, decode, decoder
+import collections
 
 tc = TransmissionClient('localhost', 9091)
 
@@ -49,6 +52,13 @@ class TransmissionUI(object):
     @cherrypy.tools.json_out()
     def get_custom_settings(self):
         return tc.get_custom_settings()
+
+    @cherrypy.expose
+    @cherrypy.tools.json_in()
+    @cherrypy.tools.json_out()
+    def get_tmp_torrent_file(self):
+        data = cherrypy.request.json
+        return tc.download_tmp_torrent(data['url'])
 
 
 if __name__ == '__main__':

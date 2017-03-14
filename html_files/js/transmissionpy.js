@@ -453,6 +453,23 @@ $('#torrent_url_w_options, #custom-download-dir').on('input', function() {
   } else {
     setDownloadCompleteDir(false);
   }
+  if($(this).attr('id') == 'torrent_url_w_options') {
+    url = $(this).val();
+    if(url.match(/^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/) != null) {
+      console.log('matched and getting file');
+      $.post({
+        url: async_url + '/get_tmp_torrent_file',
+        data: JSON.stringify({'url': url}),
+        contentType: 'application/json',
+        success: function(data, status, xhr) {
+          console.log(data);
+        },
+        error: function(xhr, textStatus, error) {
+          console.log(error);
+        }
+      });
+    }
+  }
 });
 
 $('#addWithOptionsModal').on('show.bs.modal', function(e) {
@@ -473,6 +490,8 @@ $('#addWithOptionsModal').on('show.bs.modal', function(e) {
   } else {
     $('#custom-download-dir').show();
   }
+
+  $('#start-added-torrent').prop('checked', (client_settings['start_added_torrents'].toLowerCase() == 'true'));
 });
 $('#addWithOptionsModal').on('hide.bs.modal', function(e) {
   $('#torrent_url_w_options').val('');
