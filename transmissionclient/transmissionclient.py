@@ -41,6 +41,7 @@ class TransmissionClient(object):
 
     def add_torrent(self, url, settings=None):
         """
+        Add a torrent via URL or base64 encoded .torrent file
         :param url: the download url of the torrent to download
         :param settings: dictionary containing kwargs to pass into add_torrent method of transmissionrpc
         :return: the torrent object that was added
@@ -50,12 +51,14 @@ class TransmissionClient(object):
 
     def start_torrent(self, id):
         """
+        Start a torrent
         :param id: the id of the torrent to be resumed
         """
         self.client.start_torrent(id)
 
     def get_torrents(self):
         """
+        Get the full list of torrents currently in the Transmission Client
         :return: json compatible list of all torrents currently listed in the Tranmission client
         """
         torrents = self.client.get_torrents()
@@ -112,6 +115,11 @@ class TransmissionClient(object):
         return json.loads(custom_settings)
 
     def get_torrent_files(self, data):
+        """
+        Get the list of torrent files associated with a particular torrent
+        :param data: Dictionary containing the torrent download URL
+        :return: json friendly list of files associated with the torrent
+        """
         url = data['torrent_download_url']
         settings = {'paused': True}
         torrent = self.add_torrent(url, settings)
@@ -122,6 +130,11 @@ class TransmissionClient(object):
 
 
     def download_tmp_torrent(self, url):
+        """
+        Probably won't be using this function.
+        :param url:
+        :return:
+        """
         try:
             http = urllib3.PoolManager()
             r = http.request('GET', url)
