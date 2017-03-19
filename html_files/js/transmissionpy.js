@@ -456,12 +456,14 @@ var setDownloadCompleteDir = function(byHostname) {
 var buildAddTorrentFileList = function(files) {
   var list_group = $('<ul>', {'class': 'list-group'});
   var list_items = [];
+  console.log(files);
   for(i in files) {
+    var file_id = i
     file = files[i];
     var li = $('<li>', {'class': 'list-group-item'});
     var chkbox_div = $('<div>', {'class': 'checkbox'});
     var label = $('<label>');
-    var input = $('<input>', {'class': 'torrent_file_list_item', 'type': 'checkbox'});
+    var input = $('<input>', {'class': 'torrent_file_list_item', 'type': 'checkbox', 'data-file-id': file_id});
     input.prop('checked', true);
     var text = file['name'] + '&nbsp;&nbsp;';
     var span = $('<span>', {'class': 'badge', 'text': (file['size'] / 1000000).toFixed(2) + ' MB'});
@@ -484,6 +486,57 @@ var getTorrentFileList = function(url, callback=function(){}) {
     });
   }
 }
+
+var addTorrentWithOptions = function(callback=function(){}) {
+  var options;
+  var files_unwanted = [];
+  $('#torrent-files-list-container .torrent_file_list_item').each(function() {
+    if( ! $(this).prop('checked')) {
+      files_unwanted.push($(this).data('file-id'));
+    }
+  });
+  // collect the options to pass with the url to add the torrent
+  options = {
+    'torrent_download_url': $('#torrent_url_w_options').val(),
+    'settings': {
+      'files_unwanted': files_unwanted,
+      'paused': ($('#start-added-torrent').prop('checked') != true),
+      'download_dir': $('#download-complete-location').text(),
+    },
+  };
+
+  // send asynchronous call to add the torrent to the client
+  $.post({
+    url: async_url + '/add_torrent',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify(options),
+    success: function(data, status, xhr) {
+      add_btn = $('#add-torrent-btn');
+      if(xhr.status == 200) {
+        add_btn.attr('disabled', true)
+               .removeClass('btn-primary')
+               .addClass('btn-success')
+               .html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>&nbsp;&nbsp;Torrent added successfully!');
+        setTimeout(function() {
+          callback();
+        }, 900);
+    },
+    error: function(xhr, textStatus, error) {
+      var alert = alertElement({
+        'type': 'danger',
+        'id': 'add-torrent-error-alert',
+        'text': 'The following error occurred when adding the torrent: <b>' + xhr.status + ' ' + error + '</b>' +
+                '<br>This usually means your Transmission client is not running, or the web interface is not enabled.',
+      });
+      $('#addWithOptionsModal .modal-body').append(alert);
+    },
+  });
+}
+
+$('#add-torrent-btn').click(function() {
+  addTorrentWithOptions();
+});
 
 $('#torrent_url_w_options, #custom-download-dir').on('input', function() {
   if($('#sort-by-site-checkbox').prop('checked')) {
@@ -523,6 +576,7 @@ $('#addWithOptionsModal').on('show.bs.modal', function(e) {
 $('#addWithOptionsModal').on('hide.bs.modal', function(e) {
   $('#torrent_url_w_options').val('');
   $('#custom-download-dir').val('');
+  $('#torrent-files-list-container').empty();
 });
 
 $('#add-with-options').click(function() {
@@ -541,7 +595,7 @@ $('#sort-by-site-checkbox').on('change', function() {
   }
 });
 
-/***** Actions to perform when the settings modal is hidden, canceled, or settings are saved *****/
+/***** Actions to perform when modals are hidden, canceled, or settingsModal settings are saved *****/
 $('#settingsModal').on('hidden.bs.modal', function(e) {
   save_settings_btn = $('#save-settings-btn');
   save_settings_btn.removeClass()
@@ -549,6 +603,15 @@ $('#settingsModal').on('hidden.bs.modal', function(e) {
                    .html('Save changes')
                    .attr('disabled', false);
   if($('#settings-save-error-alert').length > 0) $('#settings-save-error-alert').remove();
+});
+
+$('#addWithOptionsModal').on('hidden.bs.modal', function(e) {
+  add_torrent_btn = $('#add-torrent-btn');
+  add_torrent_btn.removeClass()
+                 .addClass('btn btn-primary')
+                 .html('Add torrent')
+                 .attr('disabled', false);
+  if($('#add-torrent-error-alert').length > 0) $('#add-torrent-error-alert').remove();
 });
 
 /************ ENTRY POINT ***********/

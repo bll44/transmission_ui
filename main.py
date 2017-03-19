@@ -39,6 +39,13 @@ class TransmissionUI(object):
     @cherrypy.expose
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
+    def add_torrent(self):
+        data = cherrypy.request.json
+        return tc.add_torrent(data['torrent_download_url'], data['settings'])
+
+    @cherrypy.expose
+    @cherrypy.tools.json_in()
+    @cherrypy.tools.json_out()
     def set_custom_settings(self):
         data = cherrypy.request.json
         print(data)
@@ -55,6 +62,7 @@ class TransmissionUI(object):
     def get_torrent_files(self):
         data = cherrypy.request.json
         return tc.get_torrent_files(data)
+
 
 if __name__ == '__main__':
     cherrypy.quickstart(TransmissionUI(), '/',

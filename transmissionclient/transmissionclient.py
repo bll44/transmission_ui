@@ -125,6 +125,7 @@ class TransmissionClient(object):
         torrent = self.add_torrent(url, settings)
         torrent_id = int(torrent['id'])
         files = self.client.get_files(torrent_id)[torrent_id]
+        print(files)
         self.client.remove_torrent(torrent_id)
         return files
 
