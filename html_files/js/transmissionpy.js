@@ -521,6 +521,7 @@ var addTorrentWithOptions = function(callback=function(){}) {
         setTimeout(function() {
           callback();
         }, 900);
+      }
     },
     error: function(xhr, textStatus, error) {
       var alert = alertElement({
